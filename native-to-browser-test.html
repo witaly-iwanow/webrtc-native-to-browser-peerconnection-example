@@ -31,6 +31,7 @@
     function createPeerConnection(peer_id) {
         try {
             pc = new RTCPeerConnection(pcConfig, pcOptions);
+            pc.addEventListener('track', onRemoteStreamAdded);
             pc.onicecandidate = function(event) {
                 if (event.candidate) {
                     var candidate = {
@@ -45,7 +46,7 @@
             };
             pc.onconnecting = onSessionConnecting;
             pc.onopen = onSessionOpened;
-            pc.onaddstream = onRemoteStreamAdded;
+            //pc.onaddstream = onRemoteStreamAdded;
             pc.onremovestream = onRemoteStreamRemoved;
             console.log("Created RTCPeerConnnection with config: " + JSON.stringify(pcConfig));
         } 
@@ -54,12 +55,12 @@
         }
     }
     
-
-    function onRemoteStreamAdded(event) {
-      console.log("Remote stream added:", URL.createObjectURL(event.stream));
-      var remoteVideoElement = document.getElementById('remote-video');
-      remoteVideoElement.src = URL.createObjectURL(event.stream);
-      remoteVideoElement.play();
+    function onRemoteStreamAdded(e) {
+      console.log("Remote stream added");
+      var remoteVideo = document.getElementById('remote-video');
+      if (remoteVideo.srcObject !== e.streams[0]) {
+          remoteVideo.srcObject = e.streams[0];
+      }
     }
 
     function sld_success_cb() {
@@ -310,7 +311,7 @@
 <body>
     <div id="container">
         <div id="remote">
-            <video id="remote-video" width="50%" height="50%"></video>
+            <video id="remote-video" playsinline autoplay></video>
         </div>
     </div>
     Server: <input type="text" id="server" value="http://135.222.138.136:8888" /><br>
