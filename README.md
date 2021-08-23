@@ -1,6 +1,4 @@
 WebRTC native C++ to browser PeerConnection example
 ===============================================
 
-This repository houses the code referenced by http://sourcey.com/webrtc-native-to-browser-video-streaming-example/
-
-Check out the blog post for usage instructions. Enjoy :)
+Quick fix for the original Auscaster's code. Currently (08/2021) works with Chrome and Edge, but not Firefox (and probably not with Safari)
